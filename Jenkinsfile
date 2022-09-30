@@ -15,7 +15,7 @@ pipeline {
         }
         stage('Code coverage Test') {
             steps {
-                echo "Code coverage test"
+                echo "Todo install sonarqube server"
             }
         }
         stage("Test stage") {
