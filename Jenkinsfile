@@ -8,9 +8,24 @@ pipeline {
                 echo 'Building...' + env.BRANCH_NAME
             }
         }
+        stage('Security Stage') {
+            steps {
+                echo "Testing security with snyk"
+            }
+        }
+        stage('Code coverage Test') {
+            steps {
+                echo "Code coverage test"
+            }
+        }
         stage("Test stage") {
             steps {
                 sh "./mvnw test"
+            }
+        }
+        stage("Build") {
+            steps {
+                sh "./mvnw compile"
             }
         }
     }
