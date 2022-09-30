@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker { image 'maven:3.8.6' }
+        docker { image 'openjdk:17.0.2' }
     }
     stages {
         stage('Build with unit testing') {
