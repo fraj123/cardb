@@ -33,6 +33,12 @@ pipeline {
                 sh "./mvnw spring-boot:build-image -Dsnyk.skip"
             }
         }
+        stage("Install docker") {
+            steps {
+                sh "sudo apt update"
+                sh "sudo apt install docker-ce"
+            }
+        }
         stage("Tag docker image") {
             steps {
                 sh "docker tag cardb:0.0.1-SNAPSHOT api/cardb"
