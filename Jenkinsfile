@@ -35,7 +35,7 @@ pipeline {
         }
         stage("Tag docker image") {
             steps {
-                sh "docker tag cardb:0.0.1-SNAPSHOT api/cardb"
+                sh "docker tag cardb:0.0.1-SNAPSHOT fraj123/cardb"
             }
         }
         stage("Push Docker image to Docker Hub") {
