@@ -35,8 +35,8 @@ pipeline {
         }
         stage("Install docker") {
             steps {
-                sh "sudo apt update"
-                sh "sudo apt install docker-ce"
+                sh "apt update"
+                sh "apt install docker-ce"
             }
         }
         stage("Tag docker image") {
