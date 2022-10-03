@@ -8,14 +8,19 @@ pipeline {
                 echo 'Building...' + env.BRANCH_NAME
             }
         }
-        stage('Code coverage Test') {
+        stage('Code Coverage Test') {
             steps {
-                sh "./mvnw clean verify sonar:sonar -Dsonar.projectKey=cardb -Dsonar.host.url=$env.SONAR_HOST -Dsonar.login=$env.SONAR_TOKEN"
+                sh "./mvnw clean install -DskipTests=true -Dmaven.test.failure.ignore=true sonar:sonar -Dsonar.projectKey=cardb -Dsonar.host.url=$env.SONAR_HOST -Dsonar.login=$env.SONAR_TOKEN"
             }
         }
-        stage("Test stage") {
+        stage("Unit Test stage") {
             steps {
-                sh "./mvnw test"
+                sh "./mvnw test -Dsnyk.skip"
+            }
+        }
+        stage("Security Test Stage") {
+            steps {
+                sh "./mvnw snyk:test"
             }
         }
         stage("Build") {
