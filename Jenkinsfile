@@ -8,14 +8,9 @@ pipeline {
                 echo 'Building...' + env.BRANCH_NAME
             }
         }
-        stage('Security Stage') {
-            steps {
-                echo "Testing security with snyk"
-            }
-        }
         stage('Code coverage Test') {
             steps {
-                echo "Todo install sonarqube server"
+                sh "./mvnw clean verify sonar:sonar -Dsonar.projectKey=cardb -Dsonar.host.url=$env.SONAR_HOST -Dsonar.login=$env.SONAR_TOKEN"
             }
         }
         stage("Test stage") {
