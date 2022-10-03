@@ -40,7 +40,7 @@ pipeline {
         }
         stage("Push Docker image to Docker Hub") {
             steps {
-                sh "docker login --username=$DOCKER_HUB_LOGIN_USER --password=$DOCKER_HUB_LOGIN_PASS"
+                sh "docker login --username $DOCKER_HUB_LOGIN_USER --password $DOCKER_HUB_LOGIN_PASS"
                 sh "docker push api/cardb"
             }
         }
