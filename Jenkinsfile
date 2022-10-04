@@ -61,6 +61,22 @@ pipeline {
                                         status: 'Success'
             }
         }
+
+        post {
+            always {
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
+            success {
+                office365ConnectorSend webhookUrl: "$TEAM_WEBHOOK",
+                                        message: 'The process has been finished without any error',
+                                        status: 'Success'
+            }
+            failure {
+                office365ConnectorSend webhookUrl: "$TEAM_WEBHOOK",
+                                        message: 'Error',
+                                        status: 'Failure'
+            }
+        }
     }
 }
 
