@@ -4,7 +4,7 @@ pipeline {
     }
     options {
         office365ConnectorWebhooks([
-            [name: "Office 365", url: "${env.URL_WEBHOOK_C}", notifyBackToNormal: true, notifyFailure: true, notifyRepeatedFailure: true, notifySuccess: true, notifyAborted: true]
+            [name: "Office 365", url: "${URL_WEBHOOK_C}", notifyBackToNormal: true, notifyFailure: true, notifyRepeatedFailure: true, notifySuccess: true, notifyAborted: true]
         ])
     }
     stages {
@@ -42,7 +42,7 @@ pipeline {
         stage("Send notification on Teams") {
             steps {
                 echo 'Send notification 2'
-                office365ConnectorSend webhookUrl: "${env.URL_WEBHOOK_C}",
+                office365ConnectorSend webhookUrl: "${URL_WEBHOOK_C}",
                 message: 'Code is deployed',
                 status: 'Success'            
             }
