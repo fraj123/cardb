@@ -29,5 +29,22 @@ pipeline {
             }
         }
     }
+    post {
+        success {
+            office365ConnectorSend color: '#86BC25', status: currentBuild.result, webhookUrl: "${ WEBHOOK_URL_JOSE }",
+            message: "Test Successful: ${JOB_NAME} - ${currentBuild.displayName}<br>Pipeline duration: ${currentBuild.durationString.replace(' and counting', '')}"
+        }
+        unstable {
+            office365ConnectorSend color: '#FFE933', status: currentBuild.result, webhookUrl: "${ WEBHOOK_URL_JOSE }",
+            message: "Successfully Build but Unstable. Unstable means test failure, code violation, push to remote failed etc. : ${JOB_NAME} - ${currentBuild.displayName}<br>Pipeline duration: ${currentBuild.durationString.replace(' and counting', '')}"
+        }
+        failure {
+            office365ConnectorSend color: '#ff0000', status: currentBuild.result, webhookUrl: "${ WEBHOOK_URL_JOSE }",
+            message: "Build Failed: ${JOB_NAME} - ${currentBuild.displayName}<br>Pipeline duration: ${currentBuild.durationString.replace(' and counting', '')}"
+        }
+        always {
+            echo "Build completed with status: ${currentBuild.result}"
+        }
+    }
 }
 
