@@ -2,11 +2,6 @@ pipeline {
     agent {
         docker { image 'openjdk:17.0.2' }
     }
-    options {
-        office365ConnectorWebhooks([
-            [name: "Office 365", url: "https://jalauniv.webhook.office.com/webhookb2/d7ad5541-2891-480c-aa17-f8fb042005a2@e342d848-a6cb-46aa-ac19-4800f62fb836/IncomingWebhook/1d04db455ead46c0af7f4316aa751afb/e39755ff-393d-4e19-8443-19f3bca17ff9", notifyBackToNormal: true, notifyFailure: true, notifyRepeatedFailure: true, notifySuccess: true, notifyAborted: true]
-        ])
-    }
     stages {
         stage('Show Work Branch') {
             steps {
