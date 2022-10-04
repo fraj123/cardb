@@ -34,13 +34,28 @@ pipeline {
                 echo 'sh "docker tag cardb:0.0.1-SNAPSHOT $AWS_ECR_HOST/cardb"'
             }
         }
-        
-        }
         stage("Push Docker image to ECR") {
             steps {
                 echo 'sh "docker login --username=AWS --password=$AWS_ECR_PASS $AWS_ECR_HOST"'
                 echo 'sh "docker push $AWS_ECR_HOST/cardb"'
             }
+        }
+    }
+    post {
+        success {
+            office365ConnectorSend color: '#86BC25', status: currentBuild.result, webhookUrl: "${URL_WEBHOOK_C}",
+            message: "Test Successful: ${JOB_NAME} - ${currentBuild.displayName}<br>Pipeline duration: ${currentBuild.durationString.replace(' and counting', '')}"
+        }
+        unstable {
+           office365ConnectorSend color: '#FFE933', status: currentBuild.result, webhookUrl: "${URL_WEBHOOK_C}",
+           message: "Successfully Build but Unstable. Unstable means test failure, code violation, push to remote failed etc. : ${JOB_NAME} - ${currentBuild.displayName}<br>Pipeline duration: ${currentBuild.durationString.replace(' and counting', '')}"
+        }
+        failure {
+            office365ConnectorSend color: '#ff0000', status: currentBuild.result, webhookUrl: "${URL_WEBHOOK_C}",
+            message: "Build Failed: ${JOB_NAME} - ${currentBuild.displayName}<br>Pipeline duration: ${currentBuild.durationString.replace(' and counting', '')}"
+        }
+        always {
+            echo "Build completed with status: ${currentBuild.result}"
         }
     }
 }
