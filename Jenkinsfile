@@ -31,15 +31,15 @@ pipeline {
     }
     post {
         success {
-            office365ConnectorSend color: '#86BC25', status: currentBuild.result, webhookUrl: "${WEBHOOK_URL_JOSE}",
+            office365ConnectorSend color: '#83eb34', status: currentBuild.result, webhookUrl: "${wbhk_martin}",
             message: "Test Successful: ${JOB_NAME} - ${currentBuild.displayName}<br>Pipeline duration: ${currentBuild.durationString.replace(' and counting', '')}"
         }
         unstable {
-            office365ConnectorSend color: '#FFE933', status: currentBuild.result, webhookUrl: "${WEBHOOK_URL_JOSE}",
+            office365ConnectorSend color: '#d68f31', status: currentBuild.result, webhookUrl: "${wbhk_martin}",
             message: "Successfully Build but Unstable. Unstable means test failure, code violation, push to remote failed etc. : ${JOB_NAME} - ${currentBuild.displayName}<br>Pipeline duration: ${currentBuild.durationString.replace(' and counting', '')}"
         }
         failure {
-            office365ConnectorSend color: '#ff0000', status: currentBuild.result, webhookUrl: "${WEBHOOK_URL_JOSE}",
+            office365ConnectorSend color: '#e63415', status: currentBuild.result, webhookUrl: "${wbhk_martin}",
             message: "Build Failed: ${JOB_NAME} - ${currentBuild.displayName}<br>Pipeline duration: ${currentBuild.durationString.replace(' and counting', '')}"
         }
         always {
