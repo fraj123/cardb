@@ -2,6 +2,11 @@ pipeline {
     agent {
         docker { image 'openjdk:17.0.2' }
     }
+    options {
+        office365ConnectorWebhooks([
+            [name: "Office 365", url: "${env.URL_WEBHOOK_C}", notifyBackToNormal: true, notifyFailure: true, notifyRepeatedFailure: true, notifySuccess: true, notifyAborted: true]
+        ])
+    }
     stages {
         stage('Show Work Branch') {
             steps {
@@ -20,24 +25,32 @@ pipeline {
         }
         stage("Tag docker image") {
             steps {
-                sh "docker tag cardb:0.0.1-SNAPSHOT $DOCKER_HUB_LOGIN_USER/cardb"
+                echo 'sh "docker tag cardb:0.0.1-SNAPSHOT $DOCKER_HUB_LOGIN_USER/cardb"'
             }
         }
         stage("Push Docker image to Docker Hub") {
             steps {
-                sh "docker login --username $DOCKER_HUB_LOGIN_USER --password $DOCKER_HUB_LOGIN_PASS"
-                sh "docker push $DOCKER_HUB_LOGIN_USER/cardb"
+                echo 'sh "docker login --username $DOCKER_HUB_LOGIN_USER --password $DOCKER_HUB_LOGIN_PASS"'
+                echo 'sh "docker push $DOCKER_HUB_LOGIN_USER/cardb"'
             }
         }
         stage("Tag docker image to AWS") {
             steps {
-                sh "docker tag cardb:0.0.1-SNAPSHOT $AWS_ECR_HOST/cardb"
+                echo 'sh "docker tag cardb:0.0.1-SNAPSHOT $AWS_ECR_HOST/cardb"'
+            }
+        }
+        stage("Send notification on Teams") {
+            steps {
+                echo 'Send notification 2'
+                office365ConnectorSend webhookUrl: "${env.URL_WEBHOOK_C}",
+                message: 'Code is deployed',
+                status: 'Success'            
             }
         }
         stage("Push Docker image to ECR") {
             steps {
-                sh "docker login --username=AWS --password=$AWS_ECR_PASS $AWS_ECR_HOST"
-                sh "docker push $AWS_ECR_HOST/cardb"
+                echo 'sh "docker login --username=AWS --password=$AWS_ECR_PASS $AWS_ECR_HOST"'
+                echo 'sh "docker push $AWS_ECR_HOST/cardb"'
             }
         }
     }
