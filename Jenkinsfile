@@ -42,6 +42,9 @@ pipeline {
             steps {
                 sh "docker login --username $DOCKER_HUB_LOGIN_USER --password $DOCKER_HUB_LOGIN_PASS"
                 sh "docker push $DOCKER_HUB_LOGIN_USER/cardb"
+                office365ConnectorSend webhookUrl: "$TEAM_WEBHOOK",
+                                        message: 'Image has been uploaded to DOcker Hub',
+                                        status: 'Success'
             }
         }
         stage("Tag docker image to AWS") {
@@ -53,6 +56,9 @@ pipeline {
             steps {
                 sh "docker login --username=AWS --password=$AWS_ECR_PASS $AWS_ECR_HOST"
                 sh "docker push $AWS_ECR_HOST/cardb"
+                office365ConnectorSend webhookUrl: "$TEAM_WEBHOOK",
+                                        message: 'Image has been uploaded to ECR',
+                                        status: 'Success'
             }
         }
     }
