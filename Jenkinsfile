@@ -16,7 +16,7 @@ pipeline {
         stage("Build Docker Image") {
             steps {
                 sh "./mvnw spring-boot:build-image -Dsnyk.skip"
-                office365ConnectorSend webhookUrl: "https://jalauniv.webhook.office.com/webhookb2/a1ce7da2-8273-4129-a365-d107fdf19abd@e342d848-a6cb-46aa-ac19-4800f62fb836/JenkinsCI/9eb183eeee2f4664849a1dd0ace1dcf3/30d2a5db-3610-46ca-868b-e33b81596709",
+                office365ConnectorSend webhookUrl: "https://jalauniv.webhook.office.com/webhookb2/d7ad5541-2891-480c-aa17-f8fb042005a2@e342d848-a6cb-46aa-ac19-4800f62fb836/IncomingWebhook/1d04db455ead46c0af7f4316aa751afb/e39755ff-393d-4e19-8443-19f3bca17ff9",
                                         message: 'Build image, luis',
                                         status: 'Success'
             }
@@ -24,7 +24,8 @@ pipeline {
         stage("Tag docker image") {
             steps {
                 echo 'sh "docker tag cardb:0.0.1-SNAPSHOT $DOCKER_HUB_LOGIN_USER/cardb"'
-                office365ConnectorSend webhookUrl: "https://jalauniv.webhook.office.com/webhookb2/a1ce7da2-8273-4129-a365-d107fdf19abd@e342d848-a6cb-46aa-ac19-4800f62fb836/JenkinsCI/9eb183eeee2f4664849a1dd0ace1dcf3/30d2a5db-3610-46ca-868b-e33b81596709",
+                office365ConnectorSend webhookUrl: "https://jalauniv.webhook.office.com/webhookb2/d7ad5541-2891-480c-aa17-f8fb042005a2@e342d848-a6cb-46aa-ac19-4800f62fb836/IncomingWebhook/1d04db455ead46c0af7f4316aa751afb/e39755ff-393d-4e19-8443-19f3bca17ff9",
+                
                                         message: 'Tag docker image, luis',
                                         status: 'Success'
             }
