@@ -61,15 +61,18 @@ pipeline {
                                         status: 'Success'
             }
         }
+        stage("Deploy artifacts") {
+            steps {
+                sh "./mvnw deploy -Dsnyk.skip"
+            }
+        }
     }
 
     post {
         always {
-            curl github
             archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
         }
         success {
-            sh 'curl -XPOST -H "Authorization:token $GITHUB_TOKEN" --data "**/target/*.jar"' https://github.com/fraj123/cardb/releases
             office365ConnectorSend webhookUrl: "$TEAM_WEBHOOK",
                                     message: 'The process has been finished without any error',
                                     status: 'Success'
