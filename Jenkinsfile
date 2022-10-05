@@ -6,7 +6,6 @@ pipeline {
             BUILD_TAG = "build_${BUILD_NUMBER}"
         }
     stages {
-        
         stage('Show Work Branch') {
             steps {
                 echo 'Building...' + env.BRANCH_NAME
@@ -29,7 +28,7 @@ pipeline {
         }
         stage("Build") {
             steps {
-                sh "./mvnw install -Dsnyk.skip"
+                echo "./mvnw install -Dsnyk.skip"
             }
         }
         stage("Build Docker Image") {
