@@ -38,24 +38,24 @@ pipeline {
         }
         stage("Tag docker image") {
             steps {
-                echo "/cardb:$env.BUILD_TAG"
+                echo "/cardb:$BUILD_TAG"
             }
         }
         stage("Push Docker image to Docker Hub") {
             steps {
                 echo "Login"
-                echo "docker push /cardb:$env.BUILD_TAG"
+                echo "docker push /cardb:$BUILD_TAG"
             }
         }
         stage("Tag docker image to AWS") {
             steps {
-                echo "docker tag cardb:0.0.1-SNAPSHOT:$env.BUILD_TAG /cardb:$env.BUILD_TAG"
+                echo "docker tag cardb:0.0.1-SNAPSHOT:$BUILD_TAG /cardb:$BUILD_TAG"
             }
         }
         stage("Push Docker image to ECR") {
             steps {
                 echo "docker login"
-                echo "docker push /cardb:$env.BUILD_TAG"
+                echo "docker push /cardb:$BUILD_TAG"
             }
         }
     }
