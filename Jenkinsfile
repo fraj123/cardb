@@ -2,45 +2,64 @@ pipeline {
     agent {
         docker { image 'openjdk:17.0.2' }
     }
+    environment {
+            BUILD_TAG = "build_${BUILD_NUMBER}"
+        }
     stages {
         stage('Show Work Branch') {
             steps {
                 echo 'Building...' + env.BRANCH_NAME
             }
         }
+        stage('Code Coverage Test') {
+            steps {
+                echo "sonar"
+            }
+        }
+        stage("Unit Test stage") {
+            steps {
+                echo "./mvnw test -Dsnyk.skip"
+            }
+        }
+        stage("Security Test Stage") {
+            steps {
+                echo "security"
+            }
+        }
         stage("Build") {
             steps {
-                sh "./mvnw install -Dsnyk.skip"
+                echo "./mvnw install -Dsnyk.skip"
             }
         }
         stage("Build Docker Image") {
             steps {
-                sh "./mvnw spring-boot:build-image -Dsnyk.skip"
+                echo "./mvnw spring-boot:build-image -Dsnyk.skip"
             }
         }
         stage("Tag docker image") {
             steps {
-                echo 'sh "docker tag cardb:0.0.1-SNAPSHOT $DOCKER_HUB_LOGIN_USER/cardb"'
+                echo "/cardb:$BUILD_TAG"
             }
         }
         stage("Push Docker image to Docker Hub") {
             steps {
-                echo 'sh "docker login --username $DOCKER_HUB_LOGIN_USER --password $DOCKER_HUB_LOGIN_PASS"'
-                echo 'sh "docker push $DOCKER_HUB_LOGIN_USER/cardb"'
+                echo "Login"
+                echo "docker push /cardb:$BUILD_TAG"
             }
         }
         stage("Tag docker image to AWS") {
             steps {
-                echo 'sh "docker tag cardb:0.0.1-SNAPSHOT $AWS_ECR_HOST/cardb"'
+                echo "docker tag cardb:0.0.1-SNAPSHOT:$BUILD_TAG /cardb:$BUILD_TAG"
             }
         }
         stage("Push Docker image to ECR") {
             steps {
-                echo 'sh "docker login --username=AWS --password=$AWS_ECR_PASS $AWS_ECR_HOST"'
-                echo 'sh "docker push $AWS_ECR_HOST/cardb"'
+                echo "docker login"
+                echo "docker push /cardb:$BUILD_TAG"
             }
         }
     }
+
     post {
         success {
             office365ConnectorSend color: '#86BC25', status: currentBuild.result, webhookUrl: "${wbhk_martin}",
