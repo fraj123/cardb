@@ -29,7 +29,7 @@ pipeline {
         }
         stage("Build") {
             steps {
-                echo "./mvnw install -Dsnyk.skip"
+                sh "./mvnw install -Dsnyk.skip"
             }
         }
         stage("Build Docker Image") {
@@ -61,11 +61,6 @@ pipeline {
         }
     }
     post {
-        always {
-            echo "curl github"
-            echo "artifact"
-            echo "Build completed with status: ${currentBuild.result}"
-        }
         success {
             echo "XPOST"
             office365ConnectorSend color: '#86BC25', status: currentBuild.result, webhookUrl: "${URL_WEBHOOK_C}",
@@ -78,6 +73,11 @@ pipeline {
         failure {
             office365ConnectorSend color: '#ff0000', status: currentBuild.result, webhookUrl: "${URL_WEBHOOK_C}",
             message: "Build Failed: ${JOB_NAME} - ${currentBuild.displayName}<br>Pipeline duration: ${currentBuild.durationString.replace(' and counting', '')}"
+        }
+        always {
+            echo "curl github"
+            echo "artifact"
+            echo "Build completed with status: ${currentBuild.result}"
         }
     }
 }
