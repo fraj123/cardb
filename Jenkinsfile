@@ -45,7 +45,7 @@ pipeline {
         stage("Push Docker image to Docker Hub") {
             steps {
                 echo 'sh "docker login --username $DOCKER_HUB_LOGIN_USER --password $DOCKER_HUB_LOGIN_PASS"'
-                echo sh '"docker push $DOCKER_HUB_LOGIN_USER/cardb:$env.BUILD_TAG"'
+                echo 'sh "docker push $DOCKER_HUB_LOGIN_USER/cardb:$env.BUILD_TAG"'
             }
         }
         stage("Tag docker image to AWS") {
