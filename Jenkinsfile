@@ -63,21 +63,20 @@ pipeline {
     post {
         success {
             echo "XPOST"
-            office365ConnectorSend color: '#86BC25', status: currentBuild.result, webhookUrl: "${URL_WEBHOOK_C}",
+            office365ConnectorSend color: '#86BC25', status: 'Success', webhookUrl: "${URL_WEBHOOK_C}",
             message: "Test Successful: ${JOB_NAME} - ${currentBuild.displayName}<br>Pipeline duration: ${currentBuild.durationString.replace(' and counting', '')}"
         }
         unstable {
-           office365ConnectorSend color: '#FFE933', status: currentBuild.result, webhookUrl: "${URL_WEBHOOK_C}",
+           office365ConnectorSend color: '#FFE933', status: 'Unstable', webhookUrl: "${URL_WEBHOOK_C}",
            message: "Successfully Build but Unstable. Unstable means test failure, code violation, push to remote failed etc. : ${JOB_NAME} - ${currentBuild.displayName}<br>Pipeline duration: ${currentBuild.durationString.replace(' and counting', '')}"
         }
         failure {
-            office365ConnectorSend color: '#ff0000', status: currentBuild.result, webhookUrl: "${URL_WEBHOOK_C}",
+            office365ConnectorSend color: '#ff0000', status: 'Failure', webhookUrl: "${URL_WEBHOOK_C}",
             message: "Build Failed: ${JOB_NAME} - ${currentBuild.displayName}<br>Pipeline duration: ${currentBuild.durationString.replace(' and counting', '')}"
         }
         always {
             echo "curl github"
             echo "artifact"
-            echo "Build completed with status: ${currentBuild.result}"
         }
     }
 }
