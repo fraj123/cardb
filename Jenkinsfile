@@ -3,7 +3,7 @@ pipeline {
         docker { image 'openjdk:17.0.2' }
     }
     stages {
-        $BUILD_TAG = "build_" + $BUILD_NUMBER
+        ${BUILD_TAG} = "build_" + ${BUILD_NUMBER}
         stage('Show Work Branch') {
             steps {
                 echo 'Building...' + env.BRANCH_NAME
@@ -36,18 +36,18 @@ pipeline {
         }
         stage("Tag docker image") {
             steps {
-                echo 'sh "docker tag cardb:0.0.1-SNAPSHOT:$BUILD_TAG $DOCKER_HUB_LOGIN_USER/cardb:$BUILD_TAG"'
+                echo 'sh "docker tag cardb:0.0.1-SNAPSHOT:${BUILD_TAG} $DOCKER_HUB_LOGIN_USER/cardb:${BUILD_TAG}"'
             }
         }
         stage("Push Docker image to Docker Hub") {
             steps {
                 echo 'sh "docker login --username $DOCKER_HUB_LOGIN_USER --password $DOCKER_HUB_LOGIN_PASS"'
-                echo 'sh "docker push $DOCKER_HUB_LOGIN_USER/cardb:$BUILD_TAG"'
+                echo 'sh "docker push $DOCKER_HUB_LOGIN_USER/cardb:${BUILD_TAG}"'
             }
         }
         stage("Tag docker image to AWS") {
             steps {
-                echo 'sh "docker tag cardb:0.0.1-SNAPSHOT:$BUILD_TAG $AWS_ECR_HOST/cardb:$BUILD_TAG"'
+                echo 'sh "docker tag cardb:0.0.1-SNAPSHOT:${BUILD_TAG} $AWS_ECR_HOST/cardb:${BUILD_TAG}"'
             }
         }
         stage("Push Docker image to ECR") {
