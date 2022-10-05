@@ -19,7 +19,7 @@ pipeline {
         }
         stage("Unit Test stage") {
             steps {
-                sh "./mvnw test -Dsnyk.skip"
+                echo "./mvnw test -Dsnyk.skip"
             }
         }
         stage("Security Test Stage") {
@@ -29,12 +29,12 @@ pipeline {
         }
         stage("Build") {
             steps {
-                sh "./mvnw install -Dsnyk.skip"
+                echo "./mvnw install -Dsnyk.skip"
             }
         }
         stage("Build Docker Image") {
             steps {
-                sh "./mvnw spring-boot:build-image -Dsnyk.skip"
+                echo "./mvnw spring-boot:build-image -Dsnyk.skip"
             }
         }
         stage("Tag docker image") {
