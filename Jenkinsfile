@@ -3,7 +3,7 @@ pipeline {
         docker { image 'openjdk:17.0.2' }
     }
     stages {
-        BUILD_TAG = "build_" + $BUILD_NUMBER
+        $BUILD_TAG = "build_" + $BUILD_NUMBER
         stage('Show Work Branch') {
             steps {
                 echo 'Building...' + env.BRANCH_NAME
