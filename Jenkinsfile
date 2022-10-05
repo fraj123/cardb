@@ -2,10 +2,12 @@ pipeline {
     agent {
         docker { image 'openjdk:17.0.2' }
     }
-    stages {
-        environment {
-            BUILD_TAG = "build_" + ${BUILD_NUMBER}
+    environment {
+            BUILD_TAG = '"build_" + ${BUILD_NUMBER}'
+            echo env.BUILD_TAG
         }
+    stages {
+        
         stage('Show Work Branch') {
             steps {
                 echo 'Building...' + env.BRANCH_NAME
