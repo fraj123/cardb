@@ -3,8 +3,7 @@ pipeline {
         docker { image 'openjdk:17.0.2' }
     }
     environment {
-            BUILD_TAG = '"build_" + ${BUILD_NUMBER}'
-            echo env.BUILD_TAG
+            BUILD_TAG = "build_${BUILD_NUMBER}"
         }
     stages {
         
@@ -40,24 +39,24 @@ pipeline {
         }
         stage("Tag docker image") {
             steps {
-                echo 'sh "docker tag cardb:0.0.1-SNAPSHOT:${env.BUILD_TAG} $DOCKER_HUB_LOGIN_USER/cardb:${env.BUILD_TAG}"'
+                echo 'sh "docker tag cardb:0.0.1-SNAPSHOT:$env.BUILD_TAG $DOCKER_HUB_LOGIN_USER/cardb:$env.BUILD_TAG"'
             }
         }
         stage("Push Docker image to Docker Hub") {
             steps {
                 echo 'sh "docker login --username $DOCKER_HUB_LOGIN_USER --password $DOCKER_HUB_LOGIN_PASS"'
-                echo 'sh "docker push $DOCKER_HUB_LOGIN_USER/cardb:${env.BUILD_TAG}"'
+                echo sh '"docker push $DOCKER_HUB_LOGIN_USER/cardb:$env.BUILD_TAG"'
             }
         }
         stage("Tag docker image to AWS") {
             steps {
-                echo 'sh "docker tag cardb:0.0.1-SNAPSHOT:${env.BUILD_TAG} $AWS_ECR_HOST/cardb:${env.BUILD_TAG}"'
+                echo 'sh "docker tag cardb:0.0.1-SNAPSHOT:$env.BUILD_TAG $AWS_ECR_HOST/cardb:$env.BUILD_TAG"'
             }
         }
         stage("Push Docker image to ECR") {
             steps {
                 echo 'sh "docker login --username=AWS --password=$AWS_ECR_PASS $AWS_ECR_HOST"'
-                echo 'sh "docker push $AWS_ECR_HOST/cardb:${env.BUILD_TAG}"'
+                echo 'sh "docker push $AWS_ECR_HOST/cardb:$env.BUILD_TAG"'
             }
         }
     }
